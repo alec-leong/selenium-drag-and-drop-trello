@@ -7,6 +7,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from selenium.common.exceptions import TimeoutException
 from random import randint
 
 load_dotenv()
@@ -48,7 +49,7 @@ class Trello:
         self.is_tasks_valid()
         self.__driver = webdriver.Chrome(chromedriver_rel_path)
         self.__driver.maximize_window()
-        self.__driver.implicitly_wait(4)
+        self.__driver.implicitly_wait(8)
 
     def is_tasks_valid(self):
         # Check length of tasks.
@@ -80,7 +81,7 @@ class Trello:
         ActionChains(self.__driver).send_keys(self.__email).perform()
         self.__driver.find_element_by_id('password').send_keys(self.__password)
         self.__driver.find_element_by_id('login').click()
-        WebDriverWait(self.__driver, 4)\
+        WebDriverWait(self.__driver, 8)\
             .until(expected_conditions.title_is('Log in to continue - Log in with Atlassian account'))
         ActionChains(self.__driver).send_keys(self.__password).perform()
         self.__driver.find_element_by_id('login-submit').click()
@@ -89,13 +90,14 @@ class Trello:
 
     def build_team(self):
         self.__driver.find_element_by_class_name('icon-add').click()
+        self.__driver.find_element_by_xpath('//span[text()="Let\'s Build a Team"]')
         ActionChains(self.__driver).send_keys(self.__team_name).perform()
         team_type = self.__driver.find_element_by_xpath('//label[@for="teamTypeSelect"]/following-sibling::div')
         ActionChains(self.__driver).move_to_element(team_type).click().move_by_offset(104, 32).click().perform()
         self.__driver.find_element_by_css_selector('textarea[id*="create-team-org-description"]')\
             .send_keys(self.__team_description)
         self.__driver.find_element_by_css_selector('button[data-test-id*="create-team-submit-button"]').click()
-        WebDriverWait(self.__driver, 4)\
+        WebDriverWait(self.__driver, 8)\
             .until(
                 expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, 'a[data-test-id="show-later-button"]'))
             ).click()
@@ -103,7 +105,7 @@ class Trello:
         print('Build team successful...')
 
     def create_new_board(self):
-        WebDriverWait(self.__driver, 4).until(expected_conditions.title_contains(self.__team_name))
+        WebDriverWait(self.__driver, 8).until(expected_conditions.title_contains(self.__team_name))
         self.__driver.find_element_by_css_selector('div.board-tile').click()
         self.__driver.find_element_by_css_selector('input[data-test-id="create-board-title-input"]')\
             .send_keys(self.__board_title)
@@ -112,9 +114,18 @@ class Trello:
         print('Create new board successful...')
 
     def init_tasks(self):
-        WebDriverWait(self.__driver, 4).until(expected_conditions.title_contains(f'{self.__board_title} | Trello'))
+        WebDriverWait(self.__driver, 8).until(expected_conditions.title_contains(f'{self.__board_title} | Trello'))
 
-        # Initialize tasks
+        # Check if tasks pre-initialized by Trello
+        css_path = 'div.js-add-list.list-wrapper.mod-add.is-idle form'
+        try:
+            add_another_list = WebDriverWait(self.__driver, 2)\
+                .until(expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, css_path)))
+            add_another_list.click()
+        except TimeoutException:
+            pass
+
+        # Initialize tasks.
         for i, task in enumerate(self.__tasks):
             # Add task.
             ActionChains(self.__driver).send_keys(task['name']).perform() \
@@ -125,9 +136,12 @@ class Trello:
             # Add cards to task.
             try:
                 for j, card in enumerate(task['cards']):
-                    self.__driver.find_element_by_xpath('//span[text()="Add a card"]').click()\
+                    xpath = f'//h2[text()="{task["name"]}"]/parent::div/parent::div //span[text()="Add a card"]'
+
+                    self.__driver.find_element_by_xpath(xpath).click()\
                         if j == 0\
                         else self.__driver.find_element_by_css_selector('input[value="Add Card"]').click()
+
                     ActionChains(self.__driver).send_keys(card).perform()
                     self.__driver.find_element_by_css_selector('input[value="Add Card"]').click()
             except KeyError:
