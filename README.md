@@ -8,11 +8,11 @@
 
 ## System Requirements
 
-| Technology |     Version     |
-| :---       |      :---:      |
-| python     | 3               |
-| pip        | 21              |
-| Chrome     | >= 88.0.4324.96 |
+| Technology |      Version       |
+| :---       |       :---:        |
+| python     | >= 3               |
+| pip        | >= 21              |
+| Chrome     | >= 88.0.4324.96    |
 
 ## Getting Started
 
