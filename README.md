@@ -32,7 +32,7 @@
 
 ### 4. Install Dependencies
 ```sh
-  /selenium-drag-and-drop-trello$ pip install -r requirements.txt
+  /selenium-drag-and-drop-trello$ python -m pip install -r requirements.txt
 ```
 
 ### 6. Edit Each Environment Variable's Value
