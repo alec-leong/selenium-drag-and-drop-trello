@@ -1,5 +1,11 @@
 # selenium-drag-and-drop-trello
 
+## Demo
+
+&ensp;&ensp;&ensp;&ensp;[YouTube](https://www.youtube.com/watch?v=YOTi7KEkRo4)
+
+![Demo](trello-demo.gif)
+
 ## Supported Operating Systems
 
 * Linux
@@ -8,11 +14,11 @@
 
 ## System Requirements
 
-| Technology |     Version     |
-| :---       |      :---:      |
-| python     | 3               |
-| pip        | 21              |
-| Chrome     | >= 88.0.4324.96 |
+| Technology |      Version       |
+| :---       |       :---:        |
+| python     | >= 3               |
+| pip        | >= 21              |
+| Chrome     | >= 88.0.4324.96    |
 
 ## Getting Started
 
@@ -32,7 +38,7 @@
 
 ### 4. Install Dependencies
 ```sh
-  /selenium-drag-and-drop-trello$ pip install -r requirements.txt
+  /selenium-drag-and-drop-trello$ python -m pip install -r requirements.txt
 ```
 
 ### 6. Edit Each Environment Variable's Value
