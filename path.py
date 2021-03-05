@@ -14,4 +14,4 @@ elif operating_system == 'Darwin':
 else:
     raise OSError(f'Unsupported operating system.\n\tActual: {operating_system}\n\tExpected: Linux, Windows, or Darwin')
 
-chromedriver_rel_path += 'chromedriver.exe'
+chromedriver_rel_path += 'chromedriver'
