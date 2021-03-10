@@ -41,14 +41,14 @@
   /selenium-drag-and-drop-trello$ python -m pip install -r requirements.txt
 ```
 
-### 6. Edit Each Environment Variable's Value
+### 5. Edit Each Environment Variable's Value
 
 |    Variable     |   Default Value    |                Description                |
 | :---            |       :---:        | :---                                      |
 | TRELLO_EMAIL    | Your-Email-Here    | User's verified email address for Trello. |
 | TRELLO_PASSWORD | Your-Password-Here | User's password for Trello.               |   
 
-### 7. Execute Program
+### 6. Execute Program
 ```sh
   /selenium-drag-and-drop-trello$ python main.py
 ```
